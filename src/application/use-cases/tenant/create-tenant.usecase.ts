@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateTenantInput } from 'src/application/interfaces/tenant/create-tenant.input';
+import { CreateTenantDto } from 'src/adapters/inbound/dtos/tenant.dto';
 import { Tenant } from 'src/domain/entities/tenant.entity';
 import { TenantRepositoryToken } from 'src/domain/repositories/tenant.repository';
 import { TenantRepository } from 'src/infrastructure/persistence/postgres/tenant/tenant.repository';
@@ -11,9 +11,16 @@ export class CreateTenantUseCase {
     private readonly tenantRepository: TenantRepository,
   ) {}
 
-  async execute(input: CreateTenantInput) {
-    const domain = new Tenant({ ...input, enabled: input.enabled ?? true });
+  async execute(dto: CreateTenantDto) {
+    try {
+      const domain = new Tenant({
+        ...dto,
+        enabled: dto.enabled ?? true,
+      });
 
-    return await this.tenantRepository.upsert(domain);
+      return await this.tenantRepository.insert(domain);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

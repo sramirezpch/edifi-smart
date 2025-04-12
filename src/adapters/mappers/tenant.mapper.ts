@@ -1,4 +1,4 @@
-import { ITenant } from 'src/application/interfaces/tenant';
+import { ITenant } from 'src/application/interfaces';
 import { Tenant } from 'src/domain/entities/tenant.entity';
 import { TenantEntity } from 'src/infrastructure/persistence/postgres/tenant/tenant.entity';
 
@@ -8,7 +8,7 @@ export class TenantMapper {
   }
 
   static fromDomainToEntity(domain: Tenant): TenantEntity {
-    return new TenantEntity(domain.toObject());
+    return Object.assign(new TenantEntity(), domain.toObject());
   }
 
   static fromInputToDomain(input: ITenant): Tenant {

@@ -1,15 +1,19 @@
 services:
-  server: 
-    build: 
+  server:
+    build:
       context: .
       dockerfile: Dockerfile
     container_name: server
     ports:
-      - 3000:3000
+      - '3001:3001'
     depends_on:
       - db
-    env_file: 
-    - .env
+    environment:
+      - PORT=3001
+      - DB_HOST=db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=edifismart
   db:
     image: postgres
     container_name: database
@@ -20,7 +24,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=edifismart
     volumes:
-      -  pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:

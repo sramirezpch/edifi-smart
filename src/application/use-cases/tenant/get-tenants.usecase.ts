@@ -1,16 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { GetTenantByIdDto } from 'src/adapters/inbound/dtos/tenant.dto';
+import { GetTenantsQueryDto } from 'src/adapters/inbound/dtos/tenant.dto';
 import { TenantRepositoryToken } from 'src/domain/repositories/tenant.repository';
 import { TenantRepository } from 'src/infrastructure/persistence/postgres/tenant/tenant.repository';
 
 @Injectable()
-export class GetTenantByIdUseCase {
+export class GetTenantsUseCase {
   constructor(
     @Inject(TenantRepositoryToken)
     private readonly tenantRepository: TenantRepository,
   ) {}
 
-  async execute(params: GetTenantByIdDto) {
-    return await this.tenantRepository.findById(params.tenantId);
+  async execute(filters: GetTenantsQueryDto) {
+    return this.tenantRepository.findAll(filters);
   }
 }
