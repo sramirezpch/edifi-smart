@@ -10,14 +10,10 @@ export interface IUser {
   password: string;
 }
 
-export interface ITenant {
+export interface ICompany {
   id?: string;
-  address: string;
-  secondaryAddress?: string;
-  locality: string;
-  adminAreaLevel1: string;
-  adminAreaLevel2?: string;
-  countryCode: string;
-  postalCode?: string;
+  name: string;
+  phone: string;
+  email: string;
   enabled?: boolean;
 }
