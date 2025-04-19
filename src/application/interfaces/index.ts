@@ -17,3 +17,14 @@ export interface ICompany {
   email: string;
   enabled?: boolean;
 }
+
+export interface IBuilding {
+  id?: string;
+  name: string;
+  address: string;
+  district: string;
+  city: string;
+  countryCode: string;
+  postalCode: string;
+  company: string;
+}

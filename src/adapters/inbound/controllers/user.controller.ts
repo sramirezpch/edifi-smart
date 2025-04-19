@@ -16,7 +16,7 @@ import {
 } from '../dtos/user.dto';
 import { GetUsersUseCase } from '../../../application/use-cases/user/get-users.usecase';
 import { UpdateUserUseCase } from 'src/application/use-cases/user/update-user.usecase';
-import { GetUserUseCase } from 'src/application/use-cases/user/get-user.usecase';
+import { GetUserUseCase } from 'src/application/use-cases/user/get-user-by-id.usecase';
 
 @Controller('user')
 export class UserController {

@@ -9,5 +9,6 @@ import { CompanyEntity } from 'src/infrastructure/persistence/postgres/company/c
   controllers: [CompanyController],
   imports: [MikroOrmModule.forFeature([CompanyEntity])],
   providers: [...tenantProviders, ...tenantUsecase],
+  exports: [...tenantProviders],
 })
-export class TenantModule {}
+export class CompanyModule {}

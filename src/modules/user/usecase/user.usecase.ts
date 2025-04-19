@@ -1,5 +1,5 @@
 import { CreateUserUseCase } from 'src/application/use-cases/user/create-user.usecase';
-import { GetUserUseCase } from 'src/application/use-cases/user/get-user.usecase';
+import { GetUserUseCase } from 'src/application/use-cases/user/get-user-by-id.usecase';
 import { GetUsersUseCase } from 'src/application/use-cases/user/get-users.usecase';
 import { UpdateUserUseCase } from 'src/application/use-cases/user/update-user.usecase';
 

@@ -1,5 +1,12 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from '@mikro-orm/core';
 import { ICompany } from 'src/application/interfaces';
+import { BuildingEntity } from '../building/building.entity';
 
 /**
  * Entity adapter for PostgreSQL
@@ -20,4 +27,7 @@ export class CompanyEntity {
 
   @Property({ type: 'boolean', default: true })
   enabled: boolean;
+
+  @OneToMany(() => BuildingEntity, 'company')
+  buildings = new Collection<BuildingEntity>(this);
 }

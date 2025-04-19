@@ -10,8 +10,8 @@ export type CreateUserDto = {
   confirmPassword: string;
 };
 
-export class GetUsersQueryDto {
+export type GetUsersQueryDto = {
   role?: UserRole;
-}
+};
 
 export type UpdateUserDto = Omit<Partial<CreateUserDto>, 'confirmPassword'>;
