@@ -28,7 +28,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async findAll(filters: GetUsersParams): Promise<Array<UserEntity>> {
-    return this.userRepository.findAll({ where: filters });
+    return await this.userRepository.findAll({ where: filters });
   }
 
   async findById(id: string): Promise<UserEntity> {

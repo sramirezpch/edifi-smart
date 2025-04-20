@@ -1,9 +1,10 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { Module } from '@nestjs/common';
-import { TenantModule } from './modules/company/tenant.module';
+import { CompanyModule } from './modules/company/company.module';
 import { UserModule } from './modules/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { BuildingModule } from './modules/building/building.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -20,8 +21,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       driver: PostgreSqlDriver,
     }),
-    TenantModule,
+    CompanyModule,
     UserModule,
+    BuildingModule,
   ],
 })
 export class AppModule {}
