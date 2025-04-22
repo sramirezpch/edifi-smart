@@ -5,6 +5,7 @@ import { CompanyModule } from './modules/company/company.module';
 import { UserModule } from './modules/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BuildingModule } from './modules/building/building.module';
+import { ApartmentModule } from './modules/apartment/apartment.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -24,6 +25,7 @@ import { BuildingModule } from './modules/building/building.module';
     CompanyModule,
     UserModule,
     BuildingModule,
+    ApartmentModule,
   ],
 })
 export class AppModule {}

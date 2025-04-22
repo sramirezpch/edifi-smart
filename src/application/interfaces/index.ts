@@ -7,7 +7,8 @@ export interface IUser {
   email: string;
   identificationNumber: string;
   role: UserRole;
-  password: string;
+  password?: string;
+  apartmentIds?: Array<string>;
 }
 
 export interface ICompany {
@@ -27,4 +28,12 @@ export interface IBuilding {
   countryCode: string;
   postalCode: string;
   company: string;
+}
+
+export interface IApartment {
+  id?: string;
+  userId: string;
+  apartmentNumber: string;
+  towerNumber: string;
+  buildingId: string;
 }

@@ -8,7 +8,7 @@ export class BuildingMapper extends BaseMapper<Building, BuildingEntity> {
     return Object.assign(new BuildingEntity(), domain.toObject());
   }
 
-  fromEntityToDomain(entity: BuildingEntity): Building {
+  static fromEntityToDomain(entity: BuildingEntity): Building {
     return new Building({
       id: entity.id,
       name: entity.name,

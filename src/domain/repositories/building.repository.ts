@@ -5,7 +5,7 @@ import { CompanyEntity } from 'src/infrastructure/persistence/postgres/company/c
 export interface IBuildingRepository {
   insert(domain: Building): Promise<{ id: string }>;
   findById(id: string): Promise<BuildingEntity>;
-  findAll(): Promise<Array<Omit<BuildingEntity, 'company'>>>;
+  findAll(): Promise<Array<Omit<BuildingEntity, 'company' | 'apartments'>>>;
   update(domain: Partial<Building>): any;
 }
 

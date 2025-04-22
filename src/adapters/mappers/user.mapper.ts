@@ -5,14 +5,16 @@ import { UserEntity } from 'src/infrastructure/persistence/postgres/user/user.en
 
 export class UserMapper {
   static fromEntityToDomain(entity: UserEntity): User {
-    return new User(entity);
+    const { apartments, ...rest } = entity;
+
+    return new User({ ...rest, apartmentIds: apartments.map((a) => a.id) });
   }
 
   static fromDomainToEntity(domain: User): UserEntity {
     return Object.assign(new UserEntity(), domain);
   }
 
-  static fromInputToDomain(input: IUser): User {
+  static toDomain(input: IUser): User {
     return new User(input);
   }
 }

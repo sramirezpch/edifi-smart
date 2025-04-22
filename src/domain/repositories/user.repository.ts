@@ -1,11 +1,17 @@
 import { UserEntity } from 'src/infrastructure/persistence/postgres/user/user.entity';
 import { User } from '../entities/user.entity';
-import { GetUsersParams } from './interfaces';
-import { QueryResult } from '@mikro-orm/core';
+import {
+  FindAllWithRelations,
+  RelationKeys,
+} from 'src/infrastructure/persistence/postgres/types';
+import { Loaded } from '@mikro-orm/core';
+import { GetUsersQueryDto } from 'src/adapters/inbound/dtos/user.dto';
 
 export interface IUserRepository {
   insert(domain: User): Promise<{ id: string }>;
-  findAll(filters: GetUsersParams): Promise<Array<UserEntity>>;
+  findAll(
+    input: GetUsersQueryDto,
+  ): Promise<Array<Omit<UserEntity, 'password' | 'apartments'>>>;
   update(domain: Partial<User>): Promise<void>;
 }
 

@@ -6,8 +6,11 @@ import {
   EntityIdentifier,
   Reference,
   Ref,
+  OneToMany,
+  Collection,
 } from '@mikro-orm/core';
 import { CompanyEntity } from '../company/company.entity';
+import { ApartmentEntity } from '../apartment/apartment.entity';
 
 @Entity({ tableName: 'building' })
 export class BuildingEntity {
@@ -34,4 +37,7 @@ export class BuildingEntity {
 
   @ManyToOne(() => CompanyEntity, { ref: true })
   company: Ref<CompanyEntity>;
+
+  @OneToMany(() => ApartmentEntity, (a) => a.building)
+  apartments = new Collection<ApartmentEntity>(this);
 }

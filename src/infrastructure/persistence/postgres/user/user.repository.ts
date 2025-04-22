@@ -2,15 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from 'src/domain/entities/user.entity';
 import { IUserRepository } from 'src/domain/repositories/user.repository';
 import { UserEntity } from './user.entity';
-import {
-  EntityManager,
-  EntityRepository,
-  QueryResult,
-  wrap,
-} from '@mikro-orm/postgresql';
+import { EntityRepository } from '@mikro-orm/postgresql';
 import { UserMapper } from 'src/adapters/mappers/user.mapper';
-import { GetUsersParams } from 'src/domain/repositories/interfaces';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { FindAllWithRelations } from '../types';
+import { GetUsersQueryDto } from 'src/adapters/inbound/dtos/user.dto';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -27,8 +23,10 @@ export class UserRepository implements IUserRepository {
     return { id: insertedId };
   }
 
-  async findAll(filters: GetUsersParams): Promise<Array<UserEntity>> {
-    return await this.userRepository.findAll({ where: filters });
+  async findAll(input: GetUsersQueryDto) {
+    return await this.userRepository.findAll({
+      where: input,
+    });
   }
 
   async findById(id: string): Promise<UserEntity> {

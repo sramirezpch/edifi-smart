@@ -30,19 +30,18 @@ export class BuildingRepository implements IBuildingRepository {
     return { id: entity.id };
   }
 
-  async findAll(): Promise<Array<Omit<BuildingEntity, 'company'>>> {
+  async findAll(): Promise<
+    Array<Omit<BuildingEntity, 'company' | 'apartments'>>
+  > {
     const entities = await this.buildingRepository.findAll();
 
     return entities.map((entity) =>
-      wrap(entity).serialize({ exclude: ['company'] }),
+      wrap(entity).serialize({ exclude: ['company', 'apartments'] }),
     );
   }
 
   async findById(id: string): Promise<BuildingEntity> {
-    const building = await this.buildingRepository.findOne(
-      { id },
-      { populate: ['company'] },
-    );
+    const building = await this.buildingRepository.findOne({ id });
 
     if (!building) throw new NotFoundException('No building found');
 
