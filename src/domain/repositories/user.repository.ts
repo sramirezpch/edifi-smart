@@ -1,10 +1,5 @@
 import { UserEntity } from 'src/infrastructure/persistence/postgres/user/user.entity';
 import { User } from '../entities/user.entity';
-import {
-  FindAllWithRelations,
-  RelationKeys,
-} from 'src/infrastructure/persistence/postgres/types';
-import { Loaded } from '@mikro-orm/core';
 import { GetUsersQueryDto } from 'src/adapters/inbound/dtos/user.dto';
 
 export interface IUserRepository {

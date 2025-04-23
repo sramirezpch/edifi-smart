@@ -1,7 +1,7 @@
 import { wrap } from '@mikro-orm/core';
 import { Inject, Injectable } from '@nestjs/common';
 import { UpdateBuildingDto } from 'src/adapters/inbound/dtos/building.dto';
-import { BuildingRepositoryToken } from 'src/domain/repositories/building.repository';
+import { BuildingRepositoryToken } from 'src/domain/repositories/building/building.repository';
 import { BuildingRepository } from 'src/infrastructure/persistence/postgres/building/building.repository';
 
 @Injectable()

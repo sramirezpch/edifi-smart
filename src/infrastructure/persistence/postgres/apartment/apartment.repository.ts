@@ -1,12 +1,18 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { IApartmentRepository } from 'src/domain/repositories/apartment.repository';
+import { IApartmentRepository } from 'src/domain/repositories/apartment/apartment.repository';
 import { ApartmentEntity } from './apartment.entity';
 import { EntityRepository, ref } from '@mikro-orm/postgresql';
-import { Apartment } from 'src/domain/entities/apartment.entity';
+import { Apartment as Domain } from 'src/domain/entities/apartment.entity';
 import { ApartmentMapper } from 'src/adapters/mappers/apartment.mapper';
 import { BuildingEntity } from '../building/building.entity';
 import { UserEntity } from '../user/user.entity';
+import {
+  ApartmentDetail,
+  ApartmentDetailFields,
+  ApartmentFields,
+  Apartment,
+} from 'src/domain/repositories/apartment/types';
 
 @Injectable()
 export class ApartmentRepository implements IApartmentRepository {
@@ -15,7 +21,7 @@ export class ApartmentRepository implements IApartmentRepository {
     private readonly apartmentRepository: EntityRepository<ApartmentEntity>,
   ) {}
 
-  async insert(domain: Apartment): Promise<{ id: string }> {
+  async insert(domain: Domain): Promise<{ id: string }> {
     const entity = ApartmentMapper.fromDomainToEntity(domain);
 
     entity.building = ref(BuildingEntity, domain.buildingId);
@@ -26,16 +32,55 @@ export class ApartmentRepository implements IApartmentRepository {
     return { id: entity.id };
   }
 
-  async findById(id: string): Promise<ApartmentEntity> {
-    const entity = await this.apartmentRepository.findOne(id);
+  async findById(id: string): Promise<ApartmentDetail> {
+    const entity = await this.apartmentRepository.findOne<
+      'apartment',
+      ApartmentDetailFields,
+      ApartmentDetailFields
+    >(id, {
+      populate: ['building', 'user'],
+      fields: ['*', 'user.*', 'building.*', 'building.company.*'],
+      exclude: [
+        'user.apartments',
+        'user.password',
+        'user.role',
+        'building.apartments',
+        'building.commonAreas',
+        'building.company.enabled',
+      ],
+    });
 
     if (!entity) throw new NotFoundException('No apartment found');
 
-    return entity;
+    const building = entity.building.get();
+    const company = building.company.get();
+    const user = entity.user.get();
+
+    return {
+      ...entity,
+      user,
+      building: {
+        ...building,
+        company,
+      },
+    };
   }
 
-  async findAll(): Promise<Array<Omit<ApartmentEntity, 'building' | 'user'>>> {
-    return await this.apartmentRepository.findAll({
+  async findAll(): Promise<Apartment[]> {
+    const apartments = await this.apartmentRepository.findAll<
+      'apartment',
+      ApartmentFields,
+      ApartmentFields
+    >({
+      populate: ['user'],
+      fields: ['*', 'user.*'],
+      exclude: ['user.password', 'user.role'],
+    });
+
+    return apartments.map((apartment) => {
+      const user = apartment.user.get();
+
+      return { ...apartment, user };
     });
   }
 

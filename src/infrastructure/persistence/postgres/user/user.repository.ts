@@ -2,10 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from 'src/domain/entities/user.entity';
 import { IUserRepository } from 'src/domain/repositories/user.repository';
 import { UserEntity } from './user.entity';
-import { EntityRepository } from '@mikro-orm/postgresql';
+import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { UserMapper } from 'src/adapters/mappers/user.mapper';
-import { InjectRepository } from '@mikro-orm/nestjs';
-import { FindAllWithRelations } from '../types';
+import { InjectEntityManager, InjectRepository } from '@mikro-orm/nestjs';
 import { GetUsersQueryDto } from 'src/adapters/inbound/dtos/user.dto';
 
 @Injectable()

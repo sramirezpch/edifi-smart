@@ -37,3 +37,11 @@ export interface IApartment {
   towerNumber: string;
   buildingId: string;
 }
+
+export interface ICommonArea { 
+  id?: string;
+  name: string;
+  capacity: string;
+  enabled: boolean;
+  buildingId: string;
+}

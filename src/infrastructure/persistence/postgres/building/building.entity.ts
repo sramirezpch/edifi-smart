@@ -11,6 +11,7 @@ import {
 } from '@mikro-orm/core';
 import { CompanyEntity } from '../company/company.entity';
 import { ApartmentEntity } from '../apartment/apartment.entity';
+import { CommonAreaEntity } from '../common-area/common-area.entity';
 
 @Entity({ tableName: 'building' })
 export class BuildingEntity {
@@ -40,4 +41,7 @@ export class BuildingEntity {
 
   @OneToMany(() => ApartmentEntity, (a) => a.building)
   apartments = new Collection<ApartmentEntity>(this);
+
+  @OneToMany(() => CommonAreaEntity, (ca) => ca.building)
+  commonAreas = new Collection<CommonAreaEntity>(this);
 }

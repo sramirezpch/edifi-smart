@@ -1,7 +1,6 @@
 import {
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryKey,
   Property,
   Ref,

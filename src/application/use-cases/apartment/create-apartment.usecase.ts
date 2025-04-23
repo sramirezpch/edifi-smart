@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateApartmentDto } from 'src/adapters/inbound/dtos/apartment.dto';
 import { Apartment } from 'src/domain/entities/apartment.entity';
-import { ApartmentRepositoryToken } from 'src/domain/repositories/apartment.repository';
+import { ApartmentRepositoryToken } from 'src/domain/repositories/apartment/apartment.repository';
 import { ApartmentRepository } from 'src/infrastructure/persistence/postgres/apartment/apartment.repository';
 
 @Injectable()
