@@ -1,5 +1,14 @@
-import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  Enum,
+  HiddenProps,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from '@mikro-orm/core';
 import { UserRole } from 'src/domain/enum';
+import { ApartmentEntity } from '../apartment/apartment.entity';
 
 @Entity({ tableName: 'user' })
 export class UserEntity {
@@ -23,4 +32,7 @@ export class UserEntity {
 
   @Property({ type: 'text', nullable: false, hidden: true })
   password: string;
+
+  @OneToMany(() => ApartmentEntity, 'user')
+  apartments = new Collection<ApartmentEntity>(this);
 }

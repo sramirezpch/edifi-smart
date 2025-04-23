@@ -1,5 +1,6 @@
 import { IUser } from 'src/application/interfaces';
 import { UserRole } from '../enum';
+import { Apartment } from './apartment.entity';
 
 export class User {
   id?: string;
@@ -8,7 +9,8 @@ export class User {
   email: string;
   identificationNumber: string;
   role: UserRole;
-  password: string;
+  password?: string;
+  apartmentIds: Array<string>;
 
   constructor(props: IUser) {
     this.id = props.id;
@@ -18,5 +20,10 @@ export class User {
     this.identificationNumber = props.identificationNumber;
     this.role = props.role;
     this.password = props.password;
+    this.apartmentIds = props.apartmentIds ?? [];
+  }
+
+  toObject() {
+    return { ...this };
   }
 }

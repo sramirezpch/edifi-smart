@@ -16,6 +16,6 @@ export class Company {
   }
 
   toObject() {
-    return this;
+    return { ...this };
   }
 }
