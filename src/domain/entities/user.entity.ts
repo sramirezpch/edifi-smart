@@ -1,29 +1,34 @@
-import { IUser } from 'src/application/interfaces';
-import { UserRole } from '../enum';
 import { Apartment } from './apartment.entity';
 
-export class User {
-  id?: string;
+export type UserProps = {
+  id: string;
   name: string;
-  lastName: string;
+  lastname: string;
   email: string;
-  identificationNumber: string;
-  role: UserRole;
-  password?: string;
-  apartmentIds: Array<string>;
+  idNumber: string;
+  idType: string;
+  role: string;
+  apartments?: Apartment[];
+};
 
-  constructor(props: IUser) {
+export class User {
+  readonly id: string;
+  readonly name: string;
+  readonly lastname: string;
+  readonly email: string;
+  readonly idNumber: string;
+  readonly idType: string;
+  readonly role: string;
+  readonly apartments?: Apartment[];
+
+  constructor(props: UserProps) {
     this.id = props.id;
     this.name = props.name;
-    this.lastName = props.lastName;
+    this.lastname = props.lastname;
     this.email = props.email;
-    this.identificationNumber = props.identificationNumber;
+    this.idNumber = props.idNumber;
+    this.idType = props.idType;
     this.role = props.role;
-    this.password = props.password;
-    this.apartmentIds = props.apartmentIds ?? [];
-  }
-
-  toObject() {
-    return { ...this };
+    this.apartments = props.apartments;
   }
 }

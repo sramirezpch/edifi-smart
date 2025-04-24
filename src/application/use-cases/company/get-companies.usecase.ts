@@ -1,16 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { GetCompaniesQueryDto } from 'src/adapters/inbound/dtos/company.dto';
-import { CompanyRepositoryToken } from 'src/domain/repositories/company.repository';
-import { CompanyRepository } from 'src/infrastructure/persistence/postgres/company/company.repository';
+import { IGetCompaniesUC } from 'src/application/ports/inbound/company/get-companies.usecase';
+import { CompanyRepositoryToken, ICompanyRepository } from 'src/application/ports/outbound/company/company.repository';
+import { CompanyDto } from 'src/application/ports/outbound/company/dto/company.dto';
 
 @Injectable()
-export class GetCompaniesUseCase {
+export class GetCompaniesUC implements IGetCompaniesUC {
   constructor(
     @Inject(CompanyRepositoryToken)
-    private readonly tenantRepository: CompanyRepository,
+    private readonly companyRepository: ICompanyRepository,
   ) {}
 
-  async execute(filters: GetCompaniesQueryDto) {
-    return this.tenantRepository.findAll(filters);
+  async execute(): Promise<Array<CompanyDto>> {
+    return await this.companyRepository.findAll();
   }
 }

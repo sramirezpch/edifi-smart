@@ -1,32 +1,28 @@
-import { wrap } from '@mikro-orm/core';
-import { Inject, Injectable } from '@nestjs/common';
-import { GetUsersQueryDto } from 'src/adapters/inbound/dtos/user.dto';
-import { UserMapper } from 'src/adapters/mappers/user.mapper';
-import { GetUsersVO } from 'src/adapters/outbound/value-objects/user.vo';
-import { UserRepositoryToken } from 'src/domain/repositories/user.repository';
-import { UserRepository } from 'src/infrastructure/persistence/postgres/user/user.repository';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { UserMapper } from 'src/application/mappers/user.mapper';
+import { UpsertUserInput } from 'src/application/ports/inbound/user/dto/user.dto';
+import { UserRepositoryToken } from 'src/application/ports/outbound/user/user.repository';
+import { User } from 'src/domain/entities/user.entity';
+import { UserRepository } from 'src/infrastructure/database/repositories/user/user.repository';
 
 @Injectable()
-export class GetUsersUseCase {
+export class GetUsersUC {
   constructor(
     @Inject(UserRepositoryToken)
     private readonly userRepository: UserRepository,
   ) {}
-
-  async execute(input: GetUsersQueryDto): Promise<Array<GetUsersVO>> {
+  async execute(): Promise<Array<User>> {
     try {
-      const users = await this.userRepository.findAll(input);
+      const users = await this.userRepository.findAll();
 
-      return users.map((user) => ({
-        email: user.email,
-        id: user.id,
-        lastName: user.lastName,
-        name: user.name,
-        role: user.role,
-      }));
+      return users.map((user) => UserMapper.fromEntityToDomain(user));
     } catch (error) {
-      console.error(error.name);
-      throw error;
+      console.error(error);
+      throw new InternalServerErrorException();
     }
   }
 }

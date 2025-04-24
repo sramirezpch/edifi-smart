@@ -1,21 +1,30 @@
-import { wrap } from '@mikro-orm/core';
-import { Inject, Injectable } from '@nestjs/common';
-import { UpdateBuildingDto } from 'src/adapters/inbound/dtos/building.dto';
-import { BuildingRepositoryToken } from 'src/domain/repositories/building.repository';
-import { BuildingRepository } from 'src/infrastructure/persistence/postgres/building/building.repository';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { BuildingMapper } from 'src/application/mappers/building.mapper';
+import { UpdateBuildingInput } from 'src/application/ports/inbound/building/dto/building.dto';
+import { IUpdateBuildingUC } from 'src/application/ports/inbound/building/update-building.usecase';
+import { BuildingRepositoryToken } from 'src/application/ports/outbound/building/building.repository';
+import { Building } from 'src/domain/entities/building.entity';
+import { BuildingRepository } from 'src/infrastructure/database/repositories/building/building.repository';
 
 @Injectable()
-export class UpdateBuildingUseCase {
+export class UpdateBuildingUC implements IUpdateBuildingUC {
   constructor(
     @Inject(BuildingRepositoryToken)
     private readonly buildingRepository: BuildingRepository,
   ) {}
 
-  async execute(id: string, dto: UpdateBuildingDto) {
-    const entity = await this.buildingRepository.findById(id);
+  async execute(input: UpdateBuildingInput): Promise<Building> {
+    try {
+      const building = await this.buildingRepository.update(input);
 
-    wrap(entity).assign(dto, { merge: true });
-
-    return await this.buildingRepository.update();
+      return BuildingMapper.fromEntityToDomain(building);
+    } catch (error) {
+      console.error({ error });
+      throw new InternalServerErrorException();
+    }
   }
 }

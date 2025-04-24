@@ -1,26 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateCompanyDto } from 'src/adapters/inbound/dtos/company.dto';
-import { Company } from 'src/domain/entities/company.entity';
-import { CompanyRepositoryToken } from 'src/domain/repositories/company.repository';
-import { CompanyRepository } from 'src/infrastructure/persistence/postgres/company/company.repository';
+import { ICreateCompanyUC } from 'src/application/ports/inbound/company/create-company.usecase';
+import { UpsertCompanyInput } from 'src/application/ports/inbound/company/dto/company.dto';
+import { CompanyRepositoryToken, ICompanyRepository } from 'src/application/ports/outbound/company/company.repository';
 
 @Injectable()
-export class CreateCompanyUseCase {
+export class CreateCompanyUC implements ICreateCompanyUC {
   constructor(
     @Inject(CompanyRepositoryToken)
-    private readonly companyRepository: CompanyRepository,
+    private readonly companyRepository: ICompanyRepository,
   ) {}
 
-  async execute(dto: CreateCompanyDto) {
-    try {
-      const domain = new Company({
-        ...dto,
-        enabled: dto.enabled ?? true,
-      });
-
-      return await this.companyRepository.insert(domain);
-    } catch (error) {
-      console.log(error);
-    }
+  async execute(input: UpsertCompanyInput): Promise<boolean> {
+    return await this.companyRepository.upsert(input);
   }
 }

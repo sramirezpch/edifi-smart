@@ -1,13 +1,22 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateBuildingDto } from 'src/adapters/inbound/dtos/building.dto';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+
+import { ICreateBuildingUC } from 'src/application/ports/inbound/building/create-building.usecase';
+import { CreateBuildingInput } from 'src/application/ports/inbound/building/dto/building.dto';
+import { BuildingRepositoryToken } from 'src/application/ports/outbound/building/building.repository';
+import { CompanyRepositoryToken } from 'src/application/ports/outbound/company/company.repository';
 import { Building } from 'src/domain/entities/building.entity';
-import { BuildingRepositoryToken } from 'src/domain/repositories/building.repository';
-import { CompanyRepositoryToken } from 'src/domain/repositories/company.repository';
-import { BuildingRepository } from 'src/infrastructure/persistence/postgres/building/building.repository';
-import { CompanyRepository } from 'src/infrastructure/persistence/postgres/company/company.repository';
+import { BuildingRepository } from 'src/infrastructure/database/repositories/building/building.repository';
+import { CompanyRepository } from 'src/infrastructure/database/repositories/company/company.repository';
+import { UniqueConstraintViolationException, wrap } from '@mikro-orm/core';
+import { BuildingMapper } from 'src/application/mappers/building.mapper';
 
 @Injectable()
-export class CreateBuildingUseCase {
+export class CreateBuildingUC implements ICreateBuildingUC {
   constructor(
     @Inject(BuildingRepositoryToken)
     private readonly buildingRepository: BuildingRepository,
@@ -15,14 +24,22 @@ export class CreateBuildingUseCase {
     private readonly companyRepository: CompanyRepository,
   ) {}
 
-  async execute(dto: CreateBuildingDto) {
+  async execute(input: CreateBuildingInput): Promise<Building> {
     try {
-      const domain = new Building(dto);
+      const building = await this.buildingRepository.insert(input);
 
-      console.log(domain.toObject());
-      return await this.buildingRepository.insert(domain);
+      return BuildingMapper.fromEntityToDomain(building);
     } catch (error) {
-      throw error;
+      if (error instanceof UniqueConstraintViolationException) {
+        console.error({
+          code: error.code,
+          cause: error.cause,
+          name: error.name,
+          message: error.message,
+        });
+        throw new BadRequestException();
+      }
+      throw new InternalServerErrorException('An error ocurred');
     }
   }
 }

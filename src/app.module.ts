@@ -1,31 +1,8 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { Module } from '@nestjs/common';
-import { CompanyModule } from './modules/company/company.module';
-import { UserModule } from './modules/user/user.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { BuildingModule } from './modules/building/building.module';
-import { ApartmentModule } from './modules/apartment/apartment.module';
+import { ConfigModule } from '@nestjs/config';
+import { InfrastructureModule } from './infrastructure/infrastructure.module';
+
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    MikroOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        user: config.get<string>('DB_USERNAME'),
-        password: config.get<string>('DB_PASSWORD'),
-        port: 5432,
-        dbName: config.get<string>('DB_NAME'),
-        host: config.get<string>('DB_HOST'),
-        driver: PostgreSqlDriver,
-        autoLoadEntities: true,
-      }),
-      driver: PostgreSqlDriver,
-    }),
-    CompanyModule,
-    UserModule,
-    BuildingModule,
-    ApartmentModule,
-  ],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), InfrastructureModule],
 })
 export class AppModule {}

@@ -1,0 +1,138 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type MinimalCompany {
+  id: ID!
+  name: String!
+}
+
+type Company {
+  id: ID!
+  name: String!
+  phone: String!
+  email: String!
+}
+
+type UserSummary {
+  id: ID!
+  name: String!
+  lastname: String!
+  email: String!
+  role: String!
+  idNumber: String
+  idType: String
+}
+
+type ApartmentUser {
+  id: ID!
+  name: String!
+  lastname: String!
+  email: String!
+}
+
+type MinimalBuilding {
+  id: ID!
+  name: String!
+  address: String!
+  district: String!
+  city: String!
+  countryCode: String!
+}
+
+type Building {
+  id: ID!
+  name: String!
+  address: String!
+  district: String!
+  city: String!
+  countryCode: String!
+  postalCode: String!
+  company: Company
+}
+
+type MinimalApartment {
+  id: ID!
+  apartmentNumber: String!
+  towerNumber: String!
+}
+
+type Apartment {
+  id: ID!
+  apartmentNumber: String!
+  towerNumber: String!
+  user: ApartmentUser
+  building: MinimalBuilding!
+}
+
+type Query {
+  companies: [MinimalCompany!]!
+  companyById(id: ID!): Company!
+  users: [UserSummary!]!
+  buildings: [MinimalBuilding!]!
+  building(id: String!): Building!
+  apartment(id: String!): Apartment!
+  apartments: [MinimalApartment!]!
+}
+
+type Mutation {
+  createCompany(input: UpsertCompanyInput!): Boolean!
+  createUser(input: UpsertUserInput!): Boolean!
+  createBuilding(input: CreateBuildingInput!): Boolean!
+  updateBuilding(input: UpdateBuildingInput!): Boolean!
+  createApartment(input: CreateApartmentInput!): Boolean!
+  updateApartment(input: UpdateApartmentInput!): Boolean!
+}
+
+input UpsertCompanyInput {
+  id: String
+  name: String!
+  phone: String!
+  email: String!
+}
+
+input UpsertUserInput {
+  id: String
+  name: String!
+  lastname: String!
+  email: String!
+  idNumber: String!
+  idType: String!
+  role: String!
+}
+
+input CreateBuildingInput {
+  name: String!
+  address: String!
+  city: String!
+  district: String!
+  countryCode: String!
+  postalCode: String!
+  companyId: String!
+}
+
+input UpdateBuildingInput {
+  name: String
+  address: String
+  city: String
+  district: String
+  countryCode: String
+  postalCode: String
+  companyId: String
+  id: String!
+}
+
+input CreateApartmentInput {
+  apartmentNumber: String!
+  towerNumber: String!
+  userId: String
+  buildingId: String!
+}
+
+input UpdateApartmentInput {
+  apartmentNumber: String
+  towerNumber: String
+  userId: String
+  buildingId: String
+  id: ID!
+}

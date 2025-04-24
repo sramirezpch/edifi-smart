@@ -1,18 +1,30 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { GetApartmentsVO } from 'src/adapters/outbound/value-objects/apartment.vo';
-import { ApartmentRepositoryToken } from 'src/domain/repositories/apartment.repository';
-import { ApartmentRepository } from 'src/infrastructure/persistence/postgres/apartment/apartment.repository';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { ApartmentMapper } from 'src/application/mappers/apartment.mapper';
+import { ApartmentRepositoryToken } from 'src/application/ports/outbound/apartment/apartment.repository';
+import { Apartment } from 'src/domain/entities/apartment.entity';
+import { ApartmentRepository } from 'src/infrastructure/database/repositories/apartment/apartment.repository';
 
 @Injectable()
-export class GetApartmentsUseCase {
+export class GetApartmentsUC {
   constructor(
     @Inject(ApartmentRepositoryToken)
     private readonly apartmentRepository: ApartmentRepository,
   ) {}
 
-  async execute(): Promise<Array<GetApartmentsVO>> {
-    const apartments = await this.apartmentRepository.findAll();
+  async execute() {
+    try {
+      const apartments = await this.apartmentRepository.findAll();
 
-    return apartments.map(apartment => apartment.)
+      return apartments.map((apartment) => {
+        return ApartmentMapper.fromEntityToDomain(apartment);
+      });
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException();
+    }
   }
 }
