@@ -19,6 +19,10 @@ export class UserResolver {
 
   @Query(() => [UserSummary], { name: 'users' })
   async getUsers() {
-    return await this.getUsersUseCase.execute();
+    const users = await this.getUsersUseCase.execute();
+
+    console.log(users[0]);
+
+    return users;
   }
 }

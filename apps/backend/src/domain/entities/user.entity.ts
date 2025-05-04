@@ -8,6 +8,7 @@ export type UserProps = {
   idNumber: string;
   idType: string;
   role: string;
+  password: string;
   apartments?: Apartment[];
 };
 
@@ -19,6 +20,7 @@ export class User {
   readonly idNumber: string;
   readonly idType: string;
   readonly role: string;
+  private readonly password: string;
   readonly apartments?: Apartment[];
 
   constructor(props: UserProps) {
@@ -29,6 +31,7 @@ export class User {
     this.idNumber = props.idNumber;
     this.idType = props.idType;
     this.role = props.role;
+    this.password = props.password;
     this.apartments = props.apartments;
   }
 }

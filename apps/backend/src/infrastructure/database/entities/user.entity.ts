@@ -31,6 +31,9 @@ export class UserEntity {
   @Property({ type: 'text', nullable: false })
   idType: string;
 
+  @Property({ type: 'text', nullable: false })
+  password: string;
+
   @Enum({ items: () => UserRole, nativeEnumName: 'user_role' })
   role: UserRole;
 }
